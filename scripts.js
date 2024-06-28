@@ -6,21 +6,19 @@ let shortenedLinks = [];
 
 // Form untuk menambahkan link
 const linkForm = document.getElementById('linkForm');
-linkForm.addEventListener('submit', function(event) {
+linkForm.addEventListener('submit', async function(event) {
   event.preventDefault();
   const originalUrl = this.originalUrl.value.trim();
-  const selectedSubdomain = this.subdomainSelect.value.trim();
+  const subdomain = this.newSubdomain.value.trim();
 
-  // Simulasi generate link shortener (contoh sederhana)
-  let shortLink;
-  if (selectedSubdomain !== '') {
-    shortLink = `https://${selectedSubdomain}.short.link/${shortenedLinks.length + 1}`;
-  } else {
-    shortLink = `https://short.link/${shortenedLinks.length + 1}`;
-  }
+  const response = await fetch('/shorten', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: originalUrl, subdomain })
+  });
 
-  // Tampilkan hasil
-  shortenedLinks.push({ originalUrl, shortLink });
+  const result = await response.json();
+  shortenedLinks.unshift({ originalUrl, shortLink: result.shortUrl });
   updateLinksList();
   this.reset();
 });
@@ -42,13 +40,10 @@ addNewSubdomainButton.addEventListener('click', function(event) {
 // Fungsi untuk memperbarui daftar link yang sudah dishorten
 function updateLinksList() {
   const linksList = document.getElementById('linksList');
-  const shortenedResults = document.getElementById('shortenedResults');
-  shortenedResults.innerHTML = ''; // Kosongkan daftar hasil shortlink
+  linksList.innerHTML = ''; // Kosongkan daftar sebelum menambahkan lagi
 
   // Tampilkan hasil dari shortlink secara terbalik (dari yang terbaru ke yang lebih lama)
-  for (let i = shortenedLinks.length - 1; i >= 0; i--) {
-    const link = shortenedLinks[i];
-
+  shortenedLinks.forEach((link, index) => {
     const li = document.createElement('li');
     li.textContent = `${link.shortLink} -> ${link.originalUrl}`;
 
@@ -62,8 +57,8 @@ function updateLinksList() {
     });
 
     li.appendChild(copyButton);
-    shortenedResults.appendChild(li);
-  }
+    linksList.appendChild(li);
+  });
 
   // Update pilihan subdomain di form
   updateSubdomainSelect();
