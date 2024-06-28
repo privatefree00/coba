@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shortlink Generator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Shortlink Generator</h1>
+  </header>
+  <main>
+    <section id="addLink" class="section">
+      <h2>Add Link</h2>
+      <form id="linkForm">
+        <label for="originalUrl">Original URL:</label>
+        <input type="url" id="originalUrl" name="originalUrl" placeholder="Enter your URL" required>
+        <label for="subdomainSelect">Select Subdomain:</label>
+        <select id="subdomainSelect" name="subdomain">
+          <option value="">None</option>
+          <!-- Options will be dynamically added here -->
+        </select>
+        <input type="text" id="newSubdomain" name="newSubdomain" placeholder="New Subdomain">
+        <button type="button" id="addNewSubdomain">Add</button>
+        <button type="submit">Shorten</button>
+      </form>
+    </section>
+
+    <section id="shortenedLinks" class="section">
+      <h2>Shortened Links</h2>
+      <div id="shortenedResults">
+        <ul id="linksList">
+          <!-- Result links will be dynamically added here -->
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Shortlink Generator. All rights reserved.</p>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
